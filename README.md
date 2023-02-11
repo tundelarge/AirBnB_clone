@@ -3,7 +3,7 @@ AirBnB clone - The console
 hbnb-screenshot
 
 Description
-This project is part of the Holberton School Full-Stack Software Engineer program. It's the first step towards building a first full web application: an AirBnB clone. This first step consists of a custom command-line interface for data management, and the base classes for the storage of this data.
+This project is part of the Holberton School Full-Stack Software Engineer program. It's the essentials towards building a first full web application: an AirBnB clone. This first step consists of a custom command-line interface for data management, and the base classes for the storage of this data.
 
 Usage
 The console works both in interactive mode and non-interactive mode, much like a Unix shell. It prints a prompt (hbnb) and waits for the user for input.
