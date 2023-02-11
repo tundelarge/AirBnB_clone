@@ -1,4 +1,6 @@
 AirBnB clone - The console
+![image](https://user-images.githubusercontent.com/110999627/218281820-c85ba824-6240-4f82-aacb-250275cbc8db.png)
+
 hbnb-screenshot
 
 Description
