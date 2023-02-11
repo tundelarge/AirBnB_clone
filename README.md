@@ -1,10 +1,9 @@
 AirBnB clone - The console
 ![image](https://user-images.githubusercontent.com/110999627/218281820-c85ba824-6240-4f82-aacb-250275cbc8db.png)
-
 hbnb-screenshot
 
 Description
-This team project is part of the Holberton School Full-Stack Software Engineer program. It's the first step towards building a first full web application: an AirBnB clone. This first step consists of a custom command-line interface for data management, and the base classes for the storage of this data.
+This project is part of the Holberton School Full-Stack Software Engineer program. It's the first step towards building a first full web application: an AirBnB clone. This first step consists of a custom command-line interface for data management, and the base classes for the storage of this data.
 
 Usage
 The console works both in interactive mode and non-interactive mode, much like a Unix shell. It prints a prompt (hbnb) and waits for the user for input.
@@ -26,6 +25,7 @@ $ echo "help" | ./console.py
 Documented commands (type help <topic>):
 ========================================
 EOF  all  count  create  destroy  help  quit  show  update
+  
 Models
 The folder models contains all the classes used in this project.
 
@@ -37,6 +37,7 @@ city.py	City class for future location information	state_id, name
 state.py	State class for future location information	name
 place.py	Place class for future accomodation information	city_id, user_id, name, description, number_rooms, number_bathrooms, max_guest, price_by_night, latitude, longitude, amenity_ids
 review.py	Review class for future user/host review information	place_id, user_id, text
+  
 File storage
 The folder engine manages the serialization and deserialization of all the data, following a JSON format.
 
