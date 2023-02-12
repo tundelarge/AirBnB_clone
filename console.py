@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Module for the entry point of the command interpreter."""
 
-import cmd, models, re
+import cmd, re
 from models.base_model import BaseModel
 from models.user import User
 from models.city import City
@@ -9,6 +9,35 @@ from models.place import Place
 from models.state import State
 from models.amenity import Amenity
 from models.review import Review
+from models import storage
+
+def help_do_update(obj, attribute,value):
+    """This function update obj's attribute with value"""
+    if attribute in obj.__dict__.keys():
+        if re.search('^".*"$', value):
+            try:
+                if '.' in value:
+                    value = float(value)
+                else:
+                    value = int(value)
+            except ValueError:
+                #print("** value missing **")
+                return
+        else:
+            value = value.replace('"','')
+        if type(value) == type(obj.__dict__[attribute]):
+            obj.__dict__[attribute] = value
+            #print("update")
+        else:
+            #print("value error")
+            pass
+    else:
+        if re.search('^".*"$', str(value)):
+            value = value.replace('"','')
+            obj.__dict__[attribute] = value
+        else:
+            pass
+            #print("** value missing **")
 
 class HBNBCommand(cmd.Cmd):
 
@@ -49,13 +78,13 @@ class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
 
     classes = {
-        'BaseModel' : BaseModel(),
-        'User': User(),
-        'State': State(),
-        'City': City(),
-        'Amenity': Amenity(),
-        'Place': Place(),
-        'Review': Review()
+        'BaseModel' : BaseModel,
+        'User': User,
+        'State': State,
+        'City': City,
+        'Amenity': Amenity,
+        'Place': Place,
+        'Review': Review
     }
 
     def default(self, line):
@@ -84,7 +113,7 @@ class HBNBCommand(cmd.Cmd):
             if (arg[0] not in HBNBCommand.classes.keys()):
                 print("** class doesn't exist **")
             else:
-                instance = HBNBCommand.classes[arg[0]]
+                instance = HBNBCommand.classes[arg[0]]()
                 instance.save()
                 print(instance.id)
 
@@ -103,7 +132,7 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** instance id missing **")
         else:
-            all_objects = models.storage.all()
+            all_objects = storage.all()
             key = args[0] + '.' + args[1]
             if (key not in all_objects.keys()):
                 print("** no instance found **")
@@ -124,7 +153,7 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** instance id missing **")
         else:
-            all_objects = models.storage.all()
+            all_objects = storage.all()
             key = args[0] + '.' + args[1]
             if (key not in all_objects.keys()):
                 print("** no instance found **")
@@ -138,17 +167,21 @@ class HBNBCommand(cmd.Cmd):
         """
         all_objects = []
         if (line == "" or line is None):
-            for value in models.storage.all().values():
+            for value in storage.all().values():
                 all_objects.append(str(value))
             print(all_objects)
         else:
             if (line not in HBNBCommand.classes.keys()):
                 print("** class doesn't exist **")
             else:
-                for key, value in models.storage.all().items():
+                for key, value in storage.all().items():
                     if (line in key):
                         all_objects.append(str(value))
             print(all_objects)
+
+    
+    
+
 
     def do_update(self, line):
         """
@@ -159,15 +192,18 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
 
-        all_objects = models.storage.all()
+        all_objects = storage.all()
 
         rex = r'^(\S+)(?:\s(\S+)(?:\s(\S+)(?:\s((?:"[^"]*")|(?:(\S)+)))?)?)?'
+        #rex = r'^(\S+)\s(\S+)\s(\S+)\s((?:"[^"][ ]*")|(\S+))\s(.*)'
+        #rex = r'^(\S+)\s(\S+)\s(\S+)((?:\s((?:"[^"]*")|(?:(\S)+))))?\s(.*)'
         match = re.search(rex, line)
         classname = match.group(1)
         ins_id = match.group(2)
         attribute = match.group(3)
         value = match.group(4)
-
+        
+        
         if not match:
             print("** class name missing **")
         elif classname not in HBNBCommand.classes.keys():
@@ -179,6 +215,7 @@ class HBNBCommand(cmd.Cmd):
             if key not in all_objects.keys():
                 print("** no instance found **")
             else:
+                obj = all_objects[key]
                 if not attribute:
                     print("** attribute name missing **")
                 elif attribute in ['id', 'created_at', 'updated_at']:
@@ -187,9 +224,8 @@ class HBNBCommand(cmd.Cmd):
                     if not value:
                         print("** value missing **")
                     else:
-                        obj = all_objects[key]
                         if attribute in obj.__dict__.keys():
-                            if not re.search('^".*"$', value):
+                            if re.search('^".*"$', value):
                                 try:
                                     if '.' in value:
                                         value = float(value)
@@ -207,10 +243,9 @@ class HBNBCommand(cmd.Cmd):
                                 #print("value error")
                                 pass
                         else:
-                            if re.search('^".*"$', value):
+                            if re.search('^".*"$', str(value)):
                                 value = value.replace('"','')
                                 obj.__dict__[attribute] = value
-                                #print("update")
                             else:
                                 pass
                                 #print("** value missing **")                       
@@ -222,14 +257,14 @@ class HBNBCommand(cmd.Cmd):
         """
         all_objects = []
         if (line == "" or line is None):
-            for value in models.storage.all().values():
+            for value in storage.all().values():
                 all_objects.append(str(value))
             print(all_objects)
         else:
             if (line not in HBNBCommand.classes.keys()):
                 print("** class doesn't exist **")
             else:
-                for key, value in models.storage.all().items():
+                for key, value in storage.all().items():
                     if (line in key):
                         all_objects.append(str(value))
                 print(len(all_objects))
