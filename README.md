@@ -56,3 +56,4 @@ All the code is tested with the unittest module. The test for the classes are in
 Authors
 
 Esan Ayotunde - talkabouttunde@yahoo.com
+  Modupe Atinuke - sharontinuk@gmail.com
