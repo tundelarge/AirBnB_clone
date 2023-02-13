@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 """Defines the Amenity class."""
 from models.base_model import BaseModel
 
